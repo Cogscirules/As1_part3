@@ -191,10 +191,10 @@ In this exercise you have to use cross-validation to calculate the predictive er
 
 # -----Exercize 2
 
-basic_model_test = lmer(CHI_MLU ~ visit + Diagnosis + (1|subj_id), test_data)
 
 
 basic_model_train = lmer(CHI_MLU ~ visit + Diagnosis + (1|subj_id), train_data)
+summary(basic_model_train)
 
 #CreateFolds(features, num_folds)
 
@@ -209,7 +209,7 @@ for (i in folds){
     testIndexes <- which(train_data$subj_id %in% i,arr.ind=TRUE)
     testData <- train_data[testIndexes, ] #making a new variable which contains the train data
     trainData <- train_data[-testIndexes, ]
-    model1 = lmer(CHI_MLU ~ visit + Diagnosis + (1+visit|subj_id), trainData, REML = F) #new model w/ traindata
+    model1 = lmer(CHI_MLU ~ ADOS + ExpressiveLangRaw + (1+visit|subj_id), trainData, REML = F) #new model w/ traindata
     train_error[n] = modelr::rmse(model1, trainData) #making an error variable which contains the model
     testData$prediction <- predict(model1, testData, allow.new.levels = TRUE) #predict it for the test data
     test_error[n] = ModelMetrics::rmse(testData$CHI_MLU, testData$prediction)
